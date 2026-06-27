@@ -10,7 +10,11 @@ export const swaggerSpec = swaggerJSDoc({
       description:
         'Task Management System REST API. Supports JWT auth, role-based access (admin/user), and full CRUD on tasks.',
     },
-    servers: [{ url: `http://localhost:${env.port}`, description: 'Local dev' }],
+    servers: [
+      ...(process.env.NODE_ENV === 'production'
+        ? [{ url: 'https://newnop-backend.vercel.app', description: 'Production' }]
+        : [{ url: `http://localhost:${env.port}`, description: 'Local dev' }]),
+    ],
     components: {
       securitySchemes: {
         bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
@@ -102,5 +106,5 @@ export const swaggerSpec = swaggerJSDoc({
       { name: 'Users', description: 'Admin-only user listing' },
     ],
   },
-  apis: ['./src/routes/*.ts'],
+  apis: [process.env.NODE_ENV === 'production' ? './dist/routes/*.js' : './src/routes/*.ts'],
 });
