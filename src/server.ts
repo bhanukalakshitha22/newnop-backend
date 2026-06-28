@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
 import swaggerUi from 'swagger-ui-express';
 import { env } from './config/env';
 import { connectDB } from './config/db';
@@ -14,6 +15,7 @@ async function bootstrap() {
 
   const app = express();
 
+  app.use(helmet());
   app.use(cors({ origin: env.corsOrigin, credentials: true }));
   app.use(express.json());
 

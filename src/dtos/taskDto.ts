@@ -27,6 +27,8 @@ export const listTasksQuerySchema = z.object({
   priority: priorityEnum.optional(),
   q: z.string().optional(),
   assignedTo: z.string().optional(),
+  sortBy: z.enum(['createdAt', 'dueDate', 'priority', 'title']).optional(),
+  sortDir: z.enum(['asc', 'desc']).optional(),
 });
 
 export type CreateTaskInput = z.infer<typeof createTaskSchema>;

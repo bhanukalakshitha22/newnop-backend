@@ -1,8 +1,17 @@
 import { Router } from 'express';
+import rateLimit from 'express-rate-limit';
 import { authController } from '../controllers/authController';
 import { authenticate } from '../middleware/auth';
 import { validate } from '../middleware/validate';
 import { loginSchema, registerSchema } from '../dtos/authDto';
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { message: 'Too many attempts, please try again in 15 minutes.' },
+});
 
 const router = Router();
 
@@ -28,7 +37,7 @@ const router = Router();
  *       409:
  *         description: Email already registered
  */
-router.post('/register', validate(registerSchema), authController.register);
+router.post('/register', authLimiter, validate(registerSchema), authController.register);
 
 /**
  * @openapi
@@ -52,7 +61,7 @@ router.post('/register', validate(registerSchema), authController.register);
  *       401:
  *         description: Invalid credentials
  */
-router.post('/login', validate(loginSchema), authController.login);
+router.post('/login', authLimiter, validate(loginSchema), authController.login);
 
 /**
  * @openapi

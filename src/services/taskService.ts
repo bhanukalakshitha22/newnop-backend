@@ -1,5 +1,5 @@
 import { Types, FilterQuery } from 'mongoose';
-import { taskRepository } from '../repositories/taskRepository';
+import { taskRepository, SortField, SortDir } from '../repositories/taskRepository';
 import { userRepository } from '../repositories/userRepository';
 import { HttpError } from '../utils/httpError';
 import { ITask, TaskPriority, TaskStatus } from '../models/Task';
@@ -15,6 +15,8 @@ interface ListFilters {
   priority?: TaskPriority;
   q?: string;
   assignedTo?: string;
+  sortBy?: SortField;
+  sortDir?: SortDir;
 }
 
 interface CreateInput {
@@ -65,7 +67,7 @@ export const taskService = {
       query.title = { $regex: filters.q, $options: 'i' };
     }
 
-    return taskRepository.list(query);
+    return taskRepository.list(query, filters.sortBy, filters.sortDir);
   },
 
   async getById(actor: Actor, id: string) {
