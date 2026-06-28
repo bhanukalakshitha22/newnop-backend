@@ -4,6 +4,11 @@ REST API for the TaskFlow task management system, built with Express, TypeScript
 
 ---
 
+## ER Diagram
+
+<img width="711" height="411" alt="image" src="https://github.com/user-attachments/assets/edea1fe2-3f47-4a1c-a866-6dd87b90ae24" />
+
+
 ## Prerequisites
 
 | Tool | Version |
