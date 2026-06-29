@@ -1,5 +1,11 @@
 import swaggerJSDoc from 'swagger-jsdoc';
+import path from 'path';
 import { env } from '../config/env';
+
+// Use forward slashes so swagger-jsdoc's glob works on Windows and Linux/Vercel.
+// In dev (ts-node) __dirname is src/docs → resolves to src/routes/*.ts
+// In prod (compiled) __dirname is dist/docs → resolves to dist/routes/*.js
+const routesDir = path.resolve(__dirname, '../routes').replace(/\\/g, '/');
 
 export const swaggerSpec = swaggerJSDoc({
   definition: {
@@ -106,5 +112,5 @@ export const swaggerSpec = swaggerJSDoc({
       { name: 'Users', description: 'Admin-only user listing' },
     ],
   },
-  apis: [process.env.NODE_ENV === 'production' ? './dist/routes/*.js' : './src/routes/*.ts'],
+  apis: [`${routesDir}/*.ts`, `${routesDir}/*.js`],
 });
